@@ -3,17 +3,14 @@ use unicode_segmentation::UnicodeSegmentation;
 
 fn range_vec(size : usize) -> Vec<usize> {
     let mut vec = Vec::new();
-    for i in 0..size {
-        vec.push(i);
-    }
+    let mut p : usize = 0;
+    vec.resize_with(size, || { p += 1; p-1 });
     return vec;
 }
 
 fn zero_vec(size: usize) -> Vec<usize> {
     let mut vec = Vec::new();
-    for _ in 0..size {
-        vec.push(0);
-    }
+    vec.resize(size, 0);
     return vec;
 }
 
@@ -30,17 +27,19 @@ pub fn vec_levenshtein_distance<T: PartialEq>(v1: &Vec<T>, v2: &Vec<T>) -> usize
     let cur = range_vec(cols);
 
     for r in 1..rows {
+        // make a copy of the previous row so we can edit cur
         let prev = cur.to_vec();
         let mut cur = zero_vec(cols);
         cur[0] = r;
         for c in 1..cols {
-            let deletion = prev[c] + 1;
-            let insertion = cur[c - 1] + 1;
+            // deletion cost or insertion cost
+            let del_or_ins = cmp::min(prev[c] + 1, cur[c - 1] + 1);
             let edit = prev[c - 1] + (if v1[r-1] == v2[c-1] { 0 } else { 1 });
-            cur[c] = cmp::min(cmp::min(edit, deletion), insertion);
+            cur[c] = cmp::min(del_or_ins, edit);
         }
     }
 
+    // last element of bottom row
     return cur[cur.len()-1];
 }
 
