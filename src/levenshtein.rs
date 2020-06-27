@@ -21,12 +21,12 @@ pub fn vec_levenshtein_distance<T: PartialEq>(v1: &Vec<T>, v2: &Vec<T>) -> usize
         return rows - 1;
     }
 
-    let cur = range_vec(cols);
+    let mut cur = range_vec(cols);
 
     for r in 1..rows {
         // make a copy of the previous row so we can edit cur
         let prev = cur.to_vec();
-        let mut cur = vec![0; cols];
+        cur = vec![0; cols];
         cur[0] = r;
         for c in 1..cols {
             // deletion cost or insertion cost
@@ -49,4 +49,14 @@ pub fn levenshtein_distance(s1: &str, s2: &str) -> usize {
     let us2 = UnicodeSegmentation::graphemes(s2, true).collect::<Vec<&str>>();
 
     vec_levenshtein_distance(&us1, &us2)
+}
+
+#[cfg(test)]
+mod test {
+    use super::*;
+    use crate::testutils;
+    #[test]
+    fn test_levenshtein() {
+        testutils::test_distance_func("testdata/levenshtein.csv", levenshtein_distance);
+    }
 }

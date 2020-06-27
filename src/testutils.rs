@@ -10,6 +10,10 @@ pub fn test_distance_func<ResultType: PartialEq + std::fmt::Debug + std::str::Fr
     for result in reader.records() {
         let rec = result.unwrap();
         let expected: ResultType = rec[2].parse().ok().unwrap();
+        println!(
+            "comparing {} to {}, expecting {:?}",
+            &rec[0], &rec[1], expected
+        );
         assert_eq!(func(&rec[0], &rec[1]), expected);
         num_tested += 1;
     }
