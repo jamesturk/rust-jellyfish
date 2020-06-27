@@ -107,7 +107,6 @@ pub fn vec_jaro_winkler_similarity<T: PartialEq>(
     vec_jaro_or_winkler(s1, s2, true, long_tolerance)
 }
 
-
 pub fn jaro_similarity(s1: &str, s2: &str) -> f64 {
     let us1 = UnicodeSegmentation::graphemes(s1, true).collect::<Vec<&str>>();
     let us2 = UnicodeSegmentation::graphemes(s2, true).collect::<Vec<&str>>();
