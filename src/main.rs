@@ -2,6 +2,7 @@ use crate::levenshtein::levenshtein_distance;
 use crate::hamming::hamming_distance;
 use crate::jaro::{jaro_winkler_similarity, jaro_similarity};
 
+mod testutils;
 mod levenshtein;
 mod hamming;
 mod jaro;

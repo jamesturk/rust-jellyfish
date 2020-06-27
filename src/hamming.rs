@@ -24,3 +24,13 @@ pub fn hamming_distance(s1: &str, s2: &str) -> usize {
 
     vec_hamming_distance(&us1, &us2)
 }
+
+#[cfg(test)]
+mod test {
+    use super::*;
+    use crate::testutils;
+    #[test]
+    fn test_hamming() {
+        testutils::test_distance_func("testdata/hamming.csv", hamming_distance);
+    }
+}
