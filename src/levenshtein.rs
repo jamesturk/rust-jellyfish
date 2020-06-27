@@ -8,12 +8,6 @@ fn range_vec(size : usize) -> Vec<usize> {
     return vec;
 }
 
-fn zero_vec(size: usize) -> Vec<usize> {
-    let mut vec = Vec::new();
-    vec.resize(size, 0);
-    return vec;
-}
-
 pub fn vec_levenshtein_distance<T: PartialEq>(v1: &Vec<T>, v2: &Vec<T>) -> usize {
     let rows = v1.len() + 1;
     let cols = v2.len() + 1;
@@ -29,7 +23,7 @@ pub fn vec_levenshtein_distance<T: PartialEq>(v1: &Vec<T>, v2: &Vec<T>) -> usize
     for r in 1..rows {
         // make a copy of the previous row so we can edit cur
         let prev = cur.to_vec();
-        let mut cur = zero_vec(cols);
+        let mut cur = vec![0; cols];
         cur[0] = r;
         for c in 1..cols {
             // deletion cost or insertion cost
