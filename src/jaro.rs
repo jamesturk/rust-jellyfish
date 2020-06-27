@@ -1,11 +1,16 @@
 use std::cmp;
 use unicode_segmentation::UnicodeSegmentation;
 
+enum JaroVersion {
+    Pure,
+    Winkler,
+    WinklerLongTolerance,
+}
+
 fn vec_jaro_or_winkler<T: PartialEq>(
     s1: &Vec<T>,
     s2: &Vec<T>,
-    winklerize: bool,
-    long_tolerance: bool,
+    version : JaroVersion,
 ) -> f64 {
     let s1_len = s1.len();
     let s2_len = s2.len();
@@ -15,7 +20,7 @@ fn vec_jaro_or_winkler<T: PartialEq>(
     }
 
     let min_len = cmp::max(s1_len, s2_len);
-    let search_range = (min_len / 2) - 1;
+    let search_range = if min_len > 1 { (min_len / 2) - 1 } else { 0 };
 
     let mut s1_flags = vec![false; s1_len];
     let mut s2_flags = vec![false; s2_len];
@@ -71,6 +76,13 @@ fn vec_jaro_or_winkler<T: PartialEq>(
         + (common_charsf - trans_count) / common_charsf)
         / 3.0;
 
+    // check which version to run
+    let (winklerize, long_tolerance) = match version {
+        JaroVersion::Pure => (false, false),
+        JaroVersion::Winkler => (true, false),
+        JaroVersion::WinklerLongTolerance => (true, true),
+    };
+
     // winkler moddification: continue to boost similar strings
     if winklerize && weight > 0.7 && s1_len > 3 && s2_len > 3 {
         let mut i = 0;
@@ -98,29 +110,33 @@ fn vec_jaro_or_winkler<T: PartialEq>(
 }
 
 pub fn vec_jaro_similarity<T: PartialEq>(s1: &Vec<T>, s2: &Vec<T>) -> f64 {
-    vec_jaro_or_winkler(s1, s2, false, false)
+    vec_jaro_or_winkler(s1, s2, JaroVersion::Pure)
 }
 
-pub fn vec_jaro_winkler_similarity<T: PartialEq>(
-    s1: &Vec<T>,
-    s2: &Vec<T>,
-    long_tolerance: bool,
-) -> f64 {
-    vec_jaro_or_winkler(s1, s2, true, long_tolerance)
+pub fn vec_jaro_winkler_similarity<T: PartialEq>(s1: &Vec<T>, s2: &Vec<T>) -> f64 {
+    vec_jaro_or_winkler(s1, s2, JaroVersion::Winkler)
+}
+
+pub fn vec_jaro_winkler_similarity_longtol<T: PartialEq>(s1: &Vec<T>, s2: &Vec<T>) -> f64 {
+    vec_jaro_or_winkler(s1, s2, JaroVersion::WinklerLongTolerance)
 }
 
 pub fn jaro_similarity(s1: &str, s2: &str) -> f64 {
     let us1 = UnicodeSegmentation::graphemes(s1, true).collect::<Vec<&str>>();
     let us2 = UnicodeSegmentation::graphemes(s2, true).collect::<Vec<&str>>();
-
     vec_jaro_similarity(&us1, &us2)
 }
 
-pub fn jaro_winkler_similarity(s1: &str, s2: &str, long_tolerance: bool) -> f64 {
+pub fn jaro_winkler_similarity(s1: &str, s2: &str) -> f64 {
     let us1 = UnicodeSegmentation::graphemes(s1, true).collect::<Vec<&str>>();
     let us2 = UnicodeSegmentation::graphemes(s2, true).collect::<Vec<&str>>();
+    vec_jaro_winkler_similarity(&us1, &us2)
+}
 
-    vec_jaro_winkler_similarity(&us1, &us2, long_tolerance)
+pub fn jaro_winkler_similarity_longtol(s1: &str, s2: &str) -> f64 {
+    let us1 = UnicodeSegmentation::graphemes(s1, true).collect::<Vec<&str>>();
+    let us2 = UnicodeSegmentation::graphemes(s2, true).collect::<Vec<&str>>();
+    vec_jaro_winkler_similarity_longtol(&us1, &us2)
 }
 
 
@@ -132,4 +148,14 @@ mod test {
     fn test_jaro() {
         testutils::test_similarity_func("testdata/jaro_distance.csv", jaro_similarity);
     }
+
+    #[test]
+    fn test_jaro_winkler() {
+        testutils::test_similarity_func("testdata/jaro_winkler.csv", jaro_winkler_similarity);
+    }
+
+    // #[test]
+    // fn test_jaro_winkler_longtol() {
+    //     testutils::test_similarity_func("testdata/jaro_winkler.csv", jaro_winkler_similarity_longtol);
+    // }
 }
