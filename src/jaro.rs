@@ -154,8 +154,8 @@ mod test {
         testutils::test_similarity_func("testdata/jaro_winkler.csv", jaro_winkler_similarity);
     }
 
-    // #[test]
-    // fn test_jaro_winkler_longtol() {
-    //     testutils::test_similarity_func("testdata/jaro_winkler.csv", jaro_winkler_similarity_longtol);
-    // }
+    #[test]
+    fn test_jaro_winkler_longtol() {
+        testutils::test_similarity_func("testdata/jaro_winkler_longtol.csv", jaro_winkler_similarity_longtol);
+    }
 }
