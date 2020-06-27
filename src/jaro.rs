@@ -23,7 +23,8 @@ fn vec_jaro_or_winkler<T: PartialEq>(
 
     // looking only within search range, count & flag matched pairs
     for (i, s1_ch) in s1.iter().enumerate() {
-        let low = cmp::max(0, i - search_range);
+        // avoid underflow on i - search_range
+        let low = if search_range >= i { 0 } else { i - search_range };
         let hi = cmp::min(i + search_range, s2_len - 1);
         for j in low..hi + 1 {
             if !s2_flags[j] && s2[j] == *s1_ch {
@@ -119,4 +120,15 @@ pub fn jaro_winkler_similarity(s1: &str, s2: &str, long_tolerance: bool) -> f64 
     let us2 = UnicodeSegmentation::graphemes(s2, true).collect::<Vec<&str>>();
 
     vec_jaro_winkler_similarity(&us1, &us2, long_tolerance)
+}
+
+
+#[cfg(test)]
+mod test {
+    use super::*;
+    use crate::testutils;
+    #[test]
+    fn test_jaro() {
+        testutils::test_similarity_func("testdata/jaro_distance.csv", jaro_similarity);
+    }
 }
