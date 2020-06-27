@@ -59,7 +59,8 @@ fn vec_jaro_or_winkler<T: PartialEq>(
             }
         }
     }
-    let trans_count = (trans_count as f64) / 2.0;
+    // need to do floor division then cast to float
+    let trans_count = (trans_count / 2) as f64;
     let common_charsf = common_chars as f64;
     let s1_lenf = s1_len as f64;
     let s2_lenf = s2_len as f64;
