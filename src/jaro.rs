@@ -101,8 +101,8 @@ fn vec_jaro_or_winkler<T: PartialEq>(s1: &Vec<T>, s2: &Vec<T>, version: JaroVers
         if long_tolerance && min_len > 4 && common_chars > i + 1 && 2 * common_chars >= min_len + i
         {
             weight += (1.0 - weight)
-                * (common_chars - i - 1) as f64
-                * (s1_len + s2_len - i * 2 + 2) as f64;
+                * (common_charsf - i as f64 - 1.0)
+                / (s1_lenf + s2_lenf - i as f64 * 2.0 + 2.0);
         }
     }
 
