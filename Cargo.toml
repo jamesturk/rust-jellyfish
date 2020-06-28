@@ -1,13 +1,17 @@
 [package]
+edition = "2018"
 name = "rust-jellyfish"
+description = "a library for doing approximate and phonetic matching of strings."
+
 version = "0.1.0"
 authors = ["James Turk <dev@jamesturk.net>"]
-edition = "2018"
+repository = "https://github.com/jamesturk/rust-jellyfish/"
+license = "MIT"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-unicode-segmentation = "*"
+unicode-segmentation = "^1.3.0"
 
 [dev-dependencies]
 csv = "1.1"
