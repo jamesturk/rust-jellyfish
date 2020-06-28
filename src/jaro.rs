@@ -7,11 +7,7 @@ enum JaroVersion {
     WinklerLongTolerance,
 }
 
-fn vec_jaro_or_winkler<T: PartialEq>(
-    s1: &Vec<T>,
-    s2: &Vec<T>,
-    version : JaroVersion,
-) -> f64 {
+fn vec_jaro_or_winkler<T: PartialEq>(s1: &Vec<T>, s2: &Vec<T>, version: JaroVersion) -> f64 {
     let s1_len = s1.len();
     let s2_len = s2.len();
 
@@ -29,7 +25,11 @@ fn vec_jaro_or_winkler<T: PartialEq>(
     // looking only within search range, count & flag matched pairs
     for (i, s1_ch) in s1.iter().enumerate() {
         // avoid underflow on i - search_range
-        let low = if search_range >= i { 0 } else { i - search_range };
+        let low = if search_range >= i {
+            0
+        } else {
+            i - search_range
+        };
         let hi = cmp::min(i + search_range, s2_len - 1);
         for j in low..hi + 1 {
             if !s2_flags[j] && s2[j] == *s1_ch {
@@ -139,11 +139,10 @@ pub fn jaro_winkler_similarity_longtol(s1: &str, s2: &str) -> f64 {
     vec_jaro_winkler_similarity_longtol(&us1, &us2)
 }
 
-
 #[cfg(test)]
 mod test {
     use super::*;
-    use crate::testutils;
+    use crate::testutils::testutils;
     #[test]
     fn test_jaro() {
         testutils::test_similarity_func("testdata/jaro_distance.csv", jaro_similarity);
@@ -156,6 +155,9 @@ mod test {
 
     #[test]
     fn test_jaro_winkler_longtol() {
-        testutils::test_similarity_func("testdata/jaro_winkler_longtol.csv", jaro_winkler_similarity_longtol);
+        testutils::test_similarity_func(
+            "testdata/jaro_winkler_longtol.csv",
+            jaro_winkler_similarity_longtol,
+        );
     }
 }
