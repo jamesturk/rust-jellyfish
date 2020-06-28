@@ -1,6 +1,6 @@
 [package]
 edition = "2018"
-name = "rust-jellyfish"
+name = "jellyfish"
 description = "a library for doing approximate and phonetic matching of strings."
 
 version = "0.1.0"
