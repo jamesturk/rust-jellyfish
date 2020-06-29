@@ -124,6 +124,9 @@ mod test {
 
     #[test]
     fn test_damerau_levenshtein() {
-        testutils::test_distance_func("testdata/damerau_levenshtein.csv", damerau_levenshtein_distance);
+        testutils::test_distance_func(
+            "testdata/damerau_levenshtein.csv",
+            damerau_levenshtein_distance,
+        );
     }
 }
