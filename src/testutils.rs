@@ -46,4 +46,20 @@ pub mod testutils {
         }
         assert!(num_tested > 0);
     }
+
+    pub fn test_str_func(filename: &str, func: fn(&str) -> String) {
+        let mut reader = csv::ReaderBuilder::new()
+            .has_headers(false)
+            .from_path(filename)
+            .unwrap();
+        let mut num_tested = 0;
+        for result in reader.records() {
+            let rec = result.unwrap();
+            let output = func(&rec[0]);
+            println!("testing {}, expecting {}, got {}", &rec[0], &rec[1], output);
+            assert_eq!(&rec[1], output);
+            num_tested += 1;
+        }
+        assert!(num_tested > 0);
+    }
 }
