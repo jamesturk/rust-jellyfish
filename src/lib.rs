@@ -11,5 +11,5 @@ pub use levenshtein::{
     damerau_levenshtein_distance, levenshtein_distance, vec_damerau_levenshtein_distance,
     vec_levenshtein_distance,
 };
-pub use match_rating::match_rating_codex;
+pub use match_rating::{match_rating_codex, match_rating_comparison};
 mod testutils;
