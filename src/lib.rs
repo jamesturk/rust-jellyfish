@@ -2,6 +2,7 @@ mod hamming;
 mod jaro;
 mod levenshtein;
 mod match_rating;
+mod nysiis;
 pub use hamming::{hamming_distance, vec_hamming_distance};
 pub use jaro::{
     jaro_similarity, jaro_winkler_similarity, jaro_winkler_similarity_longtol, vec_jaro_similarity,
@@ -12,4 +13,5 @@ pub use levenshtein::{
     vec_levenshtein_distance,
 };
 pub use match_rating::{match_rating_codex, match_rating_comparison};
+pub use nysiis::nysiis;
 mod testutils;
