@@ -3,7 +3,7 @@ edition = "2018"
 name = "jellyfish"
 description = "a library for doing approximate and phonetic matching of strings."
 
-version = "0.1.0"
+version = "0.2.0"
 authors = ["James Turk <dev@jamesturk.net>"]
 repository = "https://github.com/jamesturk/rust-jellyfish/"
 license = "MIT"
