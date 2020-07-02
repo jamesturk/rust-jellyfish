@@ -8,12 +8,12 @@ fn isvowel(s: &str) -> bool {
 }
 
 pub fn nysiis(s: &str) -> String {
-    let s = &s.to_uppercase()[..];
-    let mut v = UnicodeSegmentation::graphemes(s, true).collect::<Vec<&str>>();
-
-    if v.len() == 0 {
+    if s.len() == 0 {
         return String::from("");
     }
+
+    let s = &s.to_uppercase()[..];
+    let mut v = UnicodeSegmentation::graphemes(s, true).collect::<Vec<&str>>();
 
     // step 1: handle prefixes
     if s.starts_with("MAC") {
