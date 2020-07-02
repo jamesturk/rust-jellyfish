@@ -3,6 +3,7 @@ mod jaro;
 mod levenshtein;
 mod match_rating;
 mod nysiis;
+mod soundex;
 pub use hamming::{hamming_distance, vec_hamming_distance};
 pub use jaro::{
     jaro_similarity, jaro_winkler_similarity, jaro_winkler_similarity_longtol, vec_jaro_similarity,
@@ -14,4 +15,5 @@ pub use levenshtein::{
 };
 pub use match_rating::{match_rating_codex, match_rating_comparison};
 pub use nysiis::nysiis;
+pub use soundex::soundex;
 mod testutils;
